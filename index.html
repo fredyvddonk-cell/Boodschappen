@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Boodschappen</title>
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <main class="app">
     <div class="top">
       <h1 id="title">Boodschappen</h1>
-      <button class="icon" aria-label="Instellingen">⚙</button>
+      <div class="top-actions"><span class="version">V4</span><button class="icon" aria-label="Instellingen">⚙</button></div>
     </div>
 
     <nav class="tabs">
@@ -20,7 +20,10 @@
     </nav>
 
     <div class="toolbar">
-      <input id="search" class="search" placeholder="Zoek product...">
+      <div class="search-wrap">
+        <input id="search" class="search" placeholder="Zoek product...">
+        <button id="clearSearch" class="search-clear" type="button" aria-label="Zoekveld leegmaken">×</button>
+      </div>
       <button id="add" class="plus" aria-label="Product toevoegen">+</button>
     </div>
 
@@ -90,8 +93,8 @@
     </form>
   </div>
 
-  <script src="js/app.js?v=3"></script>
-  <script src="js/shopping.js?v=3"></script>
-  <script src="js/stock.js?v=3"></script>
+  <script src="js/app.js?v=4"></script>
+  <script src="js/shopping.js?v=4"></script>
+  <script src="js/stock.js?v=4"></script>
 </body>
 </html>

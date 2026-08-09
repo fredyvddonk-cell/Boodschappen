@@ -1,4 +1,4 @@
-let collapsedShoppingGroups = new Set();
+let expandedShoppingGroups = new Set();
 
 function shoppingGroupKey(level, parent, name) {
   return `${group}:${level}:${parent || ''}:${name}`;
@@ -12,7 +12,7 @@ function shoppingPrioritySort(a, b) {
 
 function renderShoppingGroup(title, items, level, parent, row) {
   const key = shoppingGroupKey(level, parent, title);
-  const collapsed = collapsedShoppingGroups.has(key);
+  const collapsed = !expandedShoppingGroups.has(key);
   const secondaryKey = group === 'store' ? 'category' : 'store';
   const inner = level === 1
     ? groups(items, secondaryKey).map(([subName, subItems]) => renderShoppingGroup(subName, subItems, 2, title, row)).join('')
@@ -27,19 +27,13 @@ function renderShoppingGroup(title, items, level, parent, row) {
 
 window.toggleShoppingGroup = encodedKey => {
   const key = decodeURIComponent(encodedKey);
-  if (collapsedShoppingGroups.has(key)) collapsedShoppingGroups.delete(key);
-  else collapsedShoppingGroups.add(key);
+  if (expandedShoppingGroups.has(key)) expandedShoppingGroups.delete(key);
+  else expandedShoppingGroups.add(key);
   render();
 };
 
 window.collapseAllShopping = () => {
-  collapsedShoppingGroups = new Set();
-  const arr = products.filter(x => x.shopping && !(x.status === 'Op' && x.buyDirectWhenOut));
-  const secondaryKey = group === 'store' ? 'category' : 'store';
-  groups(arr, group).forEach(([mainName, items]) => {
-    collapsedShoppingGroups.add(shoppingGroupKey(1, '', mainName));
-    groups(items, secondaryKey).forEach(([subName]) => collapsedShoppingGroups.add(shoppingGroupKey(2, mainName, subName)));
-  });
+  expandedShoppingGroups.clear();
   render();
 };
 
@@ -62,13 +56,14 @@ function renderShopping(allProducts) {
   const urgent = arr.filter(x => x.status === 'Op' && x.buyDirectWhenOut);
   const normal = arr.filter(x => !(x.status === 'Op' && x.buyDirectWhenOut));
   const row = x => `
-    <div class="item ${x.done ? 'done' : ''}">
-      <input class="check" type="checkbox" ${x.done ? 'checked' : ''} onchange="toggleDone(${x.id})">
+    <div class="item shopping-item">
+      <input class="check" type="checkbox" aria-label="${esc(x.name)} gekocht" onchange="markBought(${x.id})">
       <div class="main">
         <div class="name">${esc(x.name)}</div>
         ${meta(x) ? `<div class="meta">${meta(x)}</div>` : ''}
         ${memoHtml(x)}
       </div>
+      <button class="small shopping-remove" type="button" onclick="removeFromShopping(${x.id})">Verwijder</button>
     </div>`;
 
   let html = '';
@@ -81,10 +76,21 @@ function renderShopping(allProducts) {
   content.innerHTML = html;
 }
 
-window.toggleDone = id => {
+window.markBought = id => {
   const x = products.find(x => x.id === id);
   if (!x) return;
-  x.done = !x.done;
+  x.status = 'Voldoende';
+  x.shopping = false;
+  x.done = false;
+  save();
+  render();
+};
+
+window.removeFromShopping = id => {
+  const x = products.find(x => x.id === id);
+  if (!x) return;
+  x.shopping = false;
+  x.done = false;
   save();
   render();
 };
@@ -93,7 +99,7 @@ function bindShoppingEvents() {
   document.querySelectorAll('[data-group]').forEach(button => {
     button.onclick = () => {
       group = button.dataset.group;
-      collapsedShoppingGroups.clear();
+      expandedShoppingGroups.clear();
       render();
     };
   });
@@ -104,6 +110,7 @@ function bindShoppingEvents() {
   $('#clearDone').onclick = () => {
     products.forEach(x => {
       if (x.shopping && x.done) {
+        x.status = 'Voldoende';
         x.shopping = false;
         x.done = false;
       }

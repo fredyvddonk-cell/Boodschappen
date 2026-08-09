@@ -138,11 +138,11 @@ function refreshCats() {
   $('#categories').innerHTML = categories.map(x => `<option value="${esc(x)}">`).join('');
 }
 
-function openModal(x = null) {
+function openModal(x = null, prefillName = '') {
   $('#store').innerHTML = '<option value="">Geen</option>' + stores.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
   $('#modalTitle').textContent = x ? 'Product wijzigen' : 'Product toevoegen';
   $('#editId').value = x?.id || '';
-  $('#productName').value = x?.name || '';
+  $('#productName').value = x?.name || prefillName || '';
   $('#quantity').value = x?.quantity || '';
   $('#unit').value = x?.unit || '';
   $('#store').value = x?.store || '';
@@ -301,17 +301,34 @@ function initApp() {
     render();
   };
 
-  $('#add').onclick = () => openModal();
+  $('#add').onclick = () => {
+    const prefillName = search.value.trim();
+    openModal(null, prefillName);
+  };
   $('#cancel').onclick = closeModal;
   $('#modal').onclick = event => {
     if (event.target.id === 'modal') closeModal();
   };
-  search.oninput = render;
+  const updateSearchClear = () => {
+    $('#clearSearch').classList.toggle('visible', Boolean(search.value));
+  };
+  search.oninput = () => {
+    updateSearchClear();
+    render();
+  };
+  $('#clearSearch').onclick = () => {
+    search.value = '';
+    updateSearchClear();
+    search.focus();
+    render();
+  };
+  updateSearchClear();
 
   document.querySelectorAll('.tab').forEach(button => {
     button.onclick = () => {
       page = button.dataset.page;
       search.value = '';
+      $('#clearSearch').classList.remove('visible');
       render();
     };
   });

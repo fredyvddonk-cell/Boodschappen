@@ -1,16 +1,14 @@
-let collapsedStockCategories = new Set();
+let expandedStockCategories = new Set();
 
 window.toggleStockCategory = encodedName => {
   const name = decodeURIComponent(encodedName);
-  if (collapsedStockCategories.has(name)) collapsedStockCategories.delete(name);
-  else collapsedStockCategories.add(name);
+  if (expandedStockCategories.has(name)) expandedStockCategories.delete(name);
+  else expandedStockCategories.add(name);
   render();
 };
 
 window.collapseAllStock = () => {
-  const query = search.value.trim().toLowerCase();
-  const arr = products.filter(x => x.name.toLowerCase().includes(query) || x.memo.toLowerCase().includes(query));
-  collapsedStockCategories = new Set(groups(arr, 'category').map(([name]) => name));
+  expandedStockCategories.clear();
   render();
 };
 
@@ -22,7 +20,7 @@ function renderStock(arr) {
 
   content.innerHTML = `<div class="stock-tools"><button class="clear" type="button" onclick="collapseAllStock()">Alles inklappen</button></div>` +
     groups(arr, 'category').map(([categoryName, items]) => {
-      const collapsed = collapsedStockCategories.has(categoryName);
+      const collapsed = !expandedStockCategories.has(categoryName);
       return `<section class="stock-category ${collapsed ? 'collapsed' : ''}">
         <button class="shopping-group-head stock-category-head" type="button" onclick="toggleStockCategory('${encodeURIComponent(categoryName)}')">
           <span>${esc(categoryName)}</span><span class="chevron">⌄</span>

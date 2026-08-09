@@ -29,3 +29,10 @@
 .stock-edit-hint{font-size:11px;color:#8b8791;margin-top:4px}
 @media(max-width:480px){.list-options{gap:7px}.list-action-buttons{gap:5px}.print-btn{padding:8px 9px;font-size:12px}.shopping-level-2{margin-left:10px}.stock-edit-hint{font-size:10px}}
 @media print{.list-action-buttons{display:none!important}.shopping-group-body{display:block!important}.shopping-group-head{font-size:16pt;padding:10pt 0 4pt}.shopping-level-2{margin-left:10pt}.shopping-level-2>.shopping-group-head{font-size:12pt}}
+
+/* Update: gekocht = voldoende; los verwijderen van boodschappenlijst */
+.shopping-item .shopping-remove{flex:0 0 auto;font-size:12px;padding:7px 9px}.shopping-item .main{min-width:0}@media(max-width:420px){.shopping-item{align-items:flex-start}.shopping-item .shopping-remove{margin-top:0;padding:7px 8px}}
+
+/* V4 */
+.top-actions{display:flex;align-items:center;gap:4px}.version{font-size:12px;font-weight:800;color:#73737d;background:var(--lav3);border-radius:999px;padding:5px 8px}
+.search-wrap{position:relative;display:flex;flex:1;min-width:0}.search-wrap .search{width:100%;padding-right:42px}.search-clear{position:absolute;right:5px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:0;border-radius:50%;background:transparent;color:#73737d;font-size:24px;line-height:1;display:none;align-items:center;justify-content:center}.search-clear.visible{display:flex}.search-clear:active{background:var(--lav3)}
