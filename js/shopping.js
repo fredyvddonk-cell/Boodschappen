@@ -66,6 +66,7 @@ function renderShopping(allProducts) {
 
   $('#count').textContent = `${arr.length} boodschappen · ${done} afgevinkt`;
   $('#clearDone').style.display = done ? 'inline-block' : 'none';
+  $('#clearDone').textContent = done ? `Afgevinkte verwerken (${done})` : 'Afgevinkte verwerken';
 
   document.querySelectorAll('[data-group]').forEach(button => {
     button.classList.toggle('active', button.dataset.group === group);
@@ -79,8 +80,8 @@ function renderShopping(allProducts) {
   const urgent = arr.filter(x => x.status === 'Op' && x.buyDirectWhenOut);
   const normal = arr.filter(x => !(x.status === 'Op' && x.buyDirectWhenOut));
   const row = x => `
-    <div class="item shopping-item">
-      <input class="check" type="checkbox" aria-label="${esc(x.name)} gekocht" onchange="markBought(${x.id})">
+    <div class="item shopping-item ${x.done ? 'done' : ''}">
+      <input class="check" type="checkbox" aria-label="${esc(x.name)} gekocht" ${x.done ? 'checked' : ''} onchange="markBought(${x.id}, this.checked)">
       <div class="main">
         <div class="name">${esc(x.name)}</div>
         ${meta(x) ? `<div class="meta">${meta(x)}</div>` : ''}
@@ -99,12 +100,10 @@ function renderShopping(allProducts) {
   content.innerHTML = html;
 }
 
-window.markBought = id => {
+window.markBought = (id, checked) => {
   const x = products.find(x => x.id === id);
   if (!x) return;
-  x.status = 'Voldoende';
-  x.shopping = false;
-  x.done = false;
+  x.done = Boolean(checked);
   save();
   render();
 };
