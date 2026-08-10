@@ -8,19 +8,20 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Boodschappen</title>
-  <link rel="stylesheet" href="style.css?v=4.1.1">
+  <link rel="stylesheet" href="style.css?v=4.2">
 </head>
 <body>
   <main class="app">
     <header class="fixed-head">
     <div class="top">
       <h1 id="title">Boodschappen</h1>
-      <div class="top-actions"><span class="version">V4.1.1</span><button class="icon" aria-label="Instellingen">⚙</button></div>
+      <div class="top-actions"><span class="version">V4.2</span><button class="icon" aria-label="Instellingen">⚙</button></div>
     </div>
 
     <nav class="tabs">
       <button class="tab active" data-page="list">Lijst</button>
       <button class="tab" data-page="stock">Voorraad</button>
+      <button class="tab" data-page="hutsel">Hutsel Frutsel</button>
       <button class="tab" data-page="manage">Beheer</button>
     </nav>
     </header>
@@ -49,6 +50,34 @@
 
     <section id="content"></section>
   </main>
+
+  
+
+  <div id="hutselModal" class="modal">
+    <form id="hutselForm" class="card">
+      <h2>Restje toevoegen</h2>
+      <input type="hidden" id="hutselEditId">
+      <div class="field">
+        <label for="hutselName">Naam *</label>
+        <input id="hutselName" required placeholder="Bijv. pasta met saus">
+      </div>
+      <div class="field">
+        <label for="hutselNote">Hoeveelheid / toelichting</label>
+        <input id="hutselNote" placeholder="Bijv. 1 portie">
+      </div>
+      <div class="field">
+        <label>Wanneer opmaken?</label>
+        <div class="hutsel-day-choice">
+          <label><input type="radio" name="hutselDay" value="today" checked> Vandaag</label>
+          <label><input type="radio" name="hutselDay" value="tomorrow"> Morgen</label>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="hutselCancel" class="btn secondary">Annuleren</button>
+        <button class="btn primary">Opslaan</button>
+      </div>
+    </form>
+  </div>
 
   <div id="modal" class="modal">
     <form id="form" class="card">
@@ -102,9 +131,10 @@
     </form>
   </div>
 
-  <script src="js/app.js?v=4.1.1"></script>
-  <script src="js/shopping.js?v=4.1.1"></script>
-  <script src="js/stock.js?v=4.1.1"></script>
+  <script src="js/app.js?v=4.2"></script>
+  <script src="js/shopping.js?v=4.2"></script>
+  <script src="js/stock.js?v=4.2"></script>
+  <script src="js/hutsel.js?v=4.2"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));

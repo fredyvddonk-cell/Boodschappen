@@ -241,7 +241,7 @@ function render() {
     button.classList.toggle('active', button.dataset.page === page);
   });
 
-  $('#title').textContent = page === 'list' ? 'Boodschappen' : page === 'stock' ? 'Voorraad' : 'Beheer';
+  $('#title').textContent = page === 'list' ? 'Boodschappen' : page === 'stock' ? 'Voorraad' : page === 'hutsel' ? 'Hutsel Frutsel' : 'Beheer';
   $('#listControls').style.display = page === 'list' ? 'block' : 'none';
 
   const query = search.value.trim().toLowerCase();
@@ -252,6 +252,7 @@ function render() {
 
   if (page === 'list') renderShopping(arr);
   else if (page === 'stock') renderStock(arr);
+  else if (page === 'hutsel') renderHutsel();
   else renderManage(arr);
 }
 
@@ -310,6 +311,10 @@ function initApp() {
   };
 
   $('#add').onclick = () => {
+    if (page === 'hutsel') {
+      openHutselModal();
+      return;
+    }
     const prefillName = search.value.trim();
     openModal(null, prefillName);
   };
@@ -341,6 +346,7 @@ function initApp() {
   });
 
   bindShoppingEvents();
+  bindHutselEvents();
   refreshCats();
   save();
   render();
