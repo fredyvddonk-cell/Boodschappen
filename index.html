@@ -8,14 +8,14 @@
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <title>Boodschappen</title>
-  <link rel="stylesheet" href="style.css?v=4.2">
+  <link rel="stylesheet" href="style.css?v=4.2.1">
 </head>
 <body>
   <main class="app">
     <header class="fixed-head">
     <div class="top">
       <h1 id="title">Boodschappen</h1>
-      <div class="top-actions"><span class="version">V4.2</span><button class="icon" aria-label="Instellingen">⚙</button></div>
+      <div class="top-actions"><span class="version">V4.2.1</span><button class="icon" aria-label="Instellingen">⚙</button></div>
     </div>
 
     <nav class="tabs">
@@ -52,6 +52,19 @@
   </main>
 
   
+
+  
+  <div id="freezerModal" class="modal">
+    <form id="freezerForm" class="card">
+      <h2 id="freezerModalTitle">Diepvriesmaaltijd toevoegen</h2>
+      <input type="hidden" id="freezerEditId">
+      <div class="field"><label for="freezerName">Maaltijd *</label><input id="freezerName" required placeholder="Bijv. bolognesesaus"></div>
+      <div class="field"><label for="freezerPortions">Aantal porties</label><input id="freezerPortions" type="number" inputmode="numeric" min="1" step="1" value="1"></div>
+      <div class="field"><label for="freezerDate">Ingevroren op</label><input id="freezerDate" type="date"></div>
+      <div class="field"><label for="freezerNote">Notitie</label><input id="freezerNote" placeholder="Optioneel"></div>
+      <div class="modal-actions"><button type="button" id="freezerCancel" class="btn secondary">Annuleren</button><button class="btn primary">Opslaan</button></div>
+    </form>
+  </div>
 
   <div id="hutselModal" class="modal">
     <form id="hutselForm" class="card">
@@ -131,10 +144,10 @@
     </form>
   </div>
 
-  <script src="js/app.js?v=4.2"></script>
-  <script src="js/shopping.js?v=4.2"></script>
-  <script src="js/stock.js?v=4.2"></script>
-  <script src="js/hutsel.js?v=4.2"></script>
+  <script src="js/app.js?v=4.2.1"></script>
+  <script src="js/shopping.js?v=4.2.1"></script>
+  <script src="js/stock.js?v=4.2.1"></script>
+  <script src="js/hutsel.js?v=4.2.1"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));

@@ -347,6 +347,7 @@ function initApp() {
 
   bindShoppingEvents();
   bindHutselEvents();
+  bindFreezerEvents();
   refreshCats();
   save();
   render();
