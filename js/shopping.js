@@ -1,4 +1,8 @@
-let expandedShoppingGroups = new Set();
+let expandedShoppingGroups = new Set(JSON.parse(localStorage.getItem('household-expanded-shopping') || '[]'));
+
+function saveShoppingExpansion() {
+  localStorage.setItem('household-expanded-shopping', JSON.stringify([...expandedShoppingGroups]));
+}
 
 function shoppingGroupKey(level, parent, name) {
   return `${group}:${level}:${parent || ''}:${name}`;
@@ -27,13 +31,32 @@ function renderShoppingGroup(title, items, level, parent, row) {
 
 window.toggleShoppingGroup = encodedKey => {
   const key = decodeURIComponent(encodedKey);
-  if (expandedShoppingGroups.has(key)) expandedShoppingGroups.delete(key);
-  else expandedShoppingGroups.add(key);
+  const parts = key.split(':');
+  const level = Number(parts[1]);
+
+  if (expandedShoppingGroups.has(key)) {
+    expandedShoppingGroups.delete(key);
+  } else {
+    expandedShoppingGroups.add(key);
+
+    // Bij het openen van een hoofdgroep meteen alle subgroepen openen.
+    if (level === 1) {
+      const parentName = parts.slice(3).join(':');
+      const arr = products.filter(x => x.shopping && !(x.status === 'Op' && x.buyDirectWhenOut));
+      const mainItems = arr.filter(x => (x[group] || 'Overig') === parentName);
+      const secondaryKey = group === 'store' ? 'category' : 'store';
+      groups(mainItems, secondaryKey).forEach(([subName]) => {
+        expandedShoppingGroups.add(shoppingGroupKey(2, parentName, subName));
+      });
+    }
+  }
+  saveShoppingExpansion();
   render();
 };
 
 window.collapseAllShopping = () => {
   expandedShoppingGroups.clear();
+  saveShoppingExpansion();
   render();
 };
 
@@ -99,7 +122,7 @@ function bindShoppingEvents() {
   document.querySelectorAll('[data-group]').forEach(button => {
     button.onclick = () => {
       group = button.dataset.group;
-      expandedShoppingGroups.clear();
+      localStorage.setItem('household-group', group);
       render();
     };
   });

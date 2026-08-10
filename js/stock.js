@@ -1,14 +1,20 @@
-let expandedStockCategories = new Set();
+let expandedStockCategories = new Set(JSON.parse(localStorage.getItem('household-expanded-stock') || '[]'));
+
+function saveStockExpansion() {
+  localStorage.setItem('household-expanded-stock', JSON.stringify([...expandedStockCategories]));
+}
 
 window.toggleStockCategory = encodedName => {
   const name = decodeURIComponent(encodedName);
   if (expandedStockCategories.has(name)) expandedStockCategories.delete(name);
   else expandedStockCategories.add(name);
+  saveStockExpansion();
   render();
 };
 
 window.collapseAllStock = () => {
   expandedStockCategories.clear();
+  saveStockExpansion();
   render();
 };
 

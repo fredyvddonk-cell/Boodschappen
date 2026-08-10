@@ -4,13 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Boodschappen</title>
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=4.1">
 </head>
 <body>
   <main class="app">
+    <header class="fixed-head">
     <div class="top">
       <h1 id="title">Boodschappen</h1>
-      <div class="top-actions"><span class="version">V4</span><button class="icon" aria-label="Instellingen">⚙</button></div>
+      <div class="top-actions"><span class="version">V4.1</span><button class="icon" aria-label="Instellingen">⚙</button></div>
     </div>
 
     <nav class="tabs">
@@ -18,6 +19,7 @@
       <button class="tab" data-page="stock">Voorraad</button>
       <button class="tab" data-page="manage">Beheer</button>
     </nav>
+    </header>
 
     <div class="toolbar">
       <div class="search-wrap">
@@ -72,7 +74,10 @@
 
       <div class="field">
         <label for="category">Categorie</label>
-        <input id="category" list="categories">
+        <div class="category-input-wrap">
+          <input id="category" list="categories">
+          <button id="clearCategory" class="field-clear" type="button" aria-label="Categorie leegmaken">×</button>
+        </div>
         <datalist id="categories"></datalist>
       </div>
 
@@ -93,8 +98,8 @@
     </form>
   </div>
 
-  <script src="js/app.js?v=4"></script>
-  <script src="js/shopping.js?v=4"></script>
-  <script src="js/stock.js?v=4"></script>
+  <script src="js/app.js?v=4.1"></script>
+  <script src="js/shopping.js?v=4.1"></script>
+  <script src="js/stock.js?v=4.1"></script>
 </body>
 </html>

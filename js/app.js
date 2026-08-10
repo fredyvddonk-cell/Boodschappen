@@ -58,8 +58,8 @@ function migrateProduct(x) {
 }
 
 let products = (JSON.parse(localStorage.getItem('household-products-v2') || 'null') || seed).map(migrateProduct);
-let page = 'list';
-let group = 'store';
+let page = localStorage.getItem('household-page') || 'list';
+let group = localStorage.getItem('household-group') || 'store';
 
 const $ = selector => document.querySelector(selector);
 let content;
@@ -151,6 +151,13 @@ function openModal(x = null, prefillName = '') {
   $('#buyDirectWhenOut').checked = Boolean(x?.buyDirectWhenOut);
   $('#modal').classList.add('open');
   setTimeout(() => $('#productName').focus(), 50);
+  const categoryInput = $('#category');
+  categoryInput.onfocus = () => categoryInput.select();
+  categoryInput.onclick = () => categoryInput.select();
+  $('#clearCategory').onclick = () => {
+    categoryInput.value = '';
+    categoryInput.focus();
+  };
 }
 
 function closeModal() {
@@ -166,9 +173,10 @@ function accordion(title, key, inner) {
   </section>`;
 }
 
-let openManageSection = '';
+let openManageSection = localStorage.getItem('household-manage-section') || '';
 window.toggleManageSection = key => {
   openManageSection = openManageSection === key ? '' : key;
+  localStorage.setItem('household-manage-section', openManageSection);
   render();
 };
 
@@ -327,8 +335,7 @@ function initApp() {
   document.querySelectorAll('.tab').forEach(button => {
     button.onclick = () => {
       page = button.dataset.page;
-      search.value = '';
-      $('#clearSearch').classList.remove('visible');
+      localStorage.setItem('household-page', page);
       render();
     };
   });
